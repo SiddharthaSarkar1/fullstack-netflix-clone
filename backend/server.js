@@ -9,12 +9,19 @@ import { ENV_VARS } from "./config/envVars.js";
 import { connectDB } from "./config/db.js";
 import { protectRoute } from "./middleware/protectRoute.js";
 
+// SwaggerImports
+import swaggerUi from "swagger-ui-express";
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+const swaggerDocument = require('./swagger/swagger-output.json');
+
 const app = express();
 const PORT = ENV_VARS.PORT;
 
 app.use(express.json()); // will allow us to parse req.json
 app.use(cookieParser());
 
+app.use("/api/v1/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/movie", protectRoute, movieRoutes);
 app.use("/api/v1/tv", protectRoute, tvRoutes);
