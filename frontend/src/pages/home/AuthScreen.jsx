@@ -1,6 +1,9 @@
+import { ChevronRight } from "lucide-react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 const AuthScreen = () => {
+  const [email, setEmail] = useState("");
   return (
     <div className="hero-bg relative">
       {/* Navbar */}
@@ -25,6 +28,21 @@ const AuthScreen = () => {
         <p className="mb-4">
           Ready to watch? Enter your email to create or restart your membership.
         </p>
+
+        <form className="flex flex-col md:flex-row gap-4 w-1/2">
+          <input
+            type="email"
+            className="p-2 rounded flex-1 bg-black/80 border border-gray-700"
+            placeholder="you@example.com"
+            id="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <button className="bg-red-600 text-xl lg:text-2xl px-2 lg:px-6 py-1 md:py-2 rounded flex justify-center items-center">
+            Get Started
+            <ChevronRight className="size-8 md:size-10" />
+          </button>
+        </form>
       </div>
     </div>
   );
