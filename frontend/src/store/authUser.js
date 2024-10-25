@@ -19,19 +19,34 @@ export const useAuthStore = create((set) => ({
       set({ isSigningUp: false, user: null });
     }
   },
-  login: async () => {
+  login: async (credentials) => {
     set({ isLoggingIn: false });
     try {
-    } catch (error) {}
+      const response = await axios.post("/api/v1/auth/login", credentials);
+      set({ user: response.data.user, isLoggingIn: false });
+    } catch (error) {
+      toast.error(error.response.data.message || "login failed");
+      set({ isLoggingIn: false, user: null });
+    }
   },
   logout: async () => {
     set({ isLoggingOut: false });
     try {
-    } catch (error) {}
+      await axios.post("/api/v1/auth/logout");
+      set({ user: null, isLoggingOut: false });
+      toast.success("Logged out successfully");
+    } catch (error) {
+      toast.error(error.response.data.message || "logout failed");
+      set({ isLoggingOut: false, user: null });
+    }
   },
   authCheck: async () => {
     set({ isCheckingAuth: true });
     try {
-    } catch (error) {}
+      const response = await axios.get("/api/v1/auth/authCheck");
+      set({ user: response.data.user, isCheckingAuth: false });
+    } catch (error) {
+      set({ isCheckingAuth: false, user: null });
+    }
   },
 }));

@@ -28,7 +28,9 @@ export async function signup(req, res) {
     const existingUserByEmail = await User.findOne({ email: email });
 
     if (existingUserByEmail) {
-      return res.status(400).json({ success: false, message: "Email already exist." });
+      return res
+        .status(400)
+        .json({ success: false, message: "Email already exist." });
     }
 
     const existingUserByUsername = await User.findOne({ username: username });
@@ -119,6 +121,15 @@ export async function logout(req, res) {
     res.status(200).json({ success: true, message: "Logged out successfully" });
   } catch (error) {
     console.log("Error in logout controller", error.message);
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+}
+
+export async function authCheck(req, res) {
+  try {
+    res.status(200).json({ success: true, user: req.user });
+  } catch (error) {
+    console.log("Error in authCheck controller", error.message);
     res.status(500).json({ success: false, message: "Internal server error" });
   }
 }
