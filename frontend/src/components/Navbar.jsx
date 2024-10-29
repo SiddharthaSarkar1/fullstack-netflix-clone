@@ -2,10 +2,13 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { LogOut, Menu, Search } from "lucide-react";
 import { useAuthStore } from "../store/authUser";
+import { useContentStore } from "../store/content";
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { user, logout } = useAuthStore();
+
+  const { setContentType } = useContentStore();
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -21,22 +24,28 @@ const Navbar = () => {
             className="w-32 sm:w-40"
           />
         </Link>
-
-        
       </div>
 
       {/* desktop navbar items */}
       <div className="hidden sm:flex gap-10 items-center z-50">
-          <Link to={"/"} className="hover:underline">
-            Movies
-          </Link>
-          <Link to={"/t"} className="hover:underline">
-            TV Shows
-          </Link>
-          <Link to={"/history"} className="hover:underline">
-            Search History
-          </Link>
-        </div>
+        <Link
+          to={"/"}
+          className="hover:underline"
+          onClick={() => setContentType("movie")}
+        >
+          Movies
+        </Link>
+        <Link
+          to={"/"}
+          className="hover:underline"
+          onClick={() => setContentType("tv")}
+        >
+          TV Shows
+        </Link>
+        <Link to={"/history"} className="hover:underline">
+          Search History
+        </Link>
+      </div>
 
       <div className="flex gap-2 items-center z-50">
         <Link to={"/search"}>
@@ -62,14 +71,21 @@ const Navbar = () => {
           <Link
             to={"/"}
             className="block hover:underline p-2"
-            onClick={toggleMobileMenu}
+            // onClick={toggleMobileMenu}
+            onClick={() => {
+              setContentType("movie");
+              toggleMobileMenu();
+            }}
           >
             Movies
           </Link>
           <Link
             to={"/"}
             className="block hover:underline p-2"
-            onClick={toggleMobileMenu}
+            onClick={() => {
+              setContentType("tv");
+              toggleMobileMenu();
+            }}
           >
             TV Shows
           </Link>
